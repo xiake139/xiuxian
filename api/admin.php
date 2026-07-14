@@ -573,6 +573,84 @@ switch ($动作) {
         JSON返回(true, '商店添加成功');
         break;
         
+    case '添加配置节':
+        if (!验证管理员()) {
+            JSON返回(false, '请先登录管理员账号');
+        }
+        
+        $配置文件名 = isset($_POST['配置文件名']) ? $_POST['配置文件名'] : '';
+        $节名 = isset($_POST['节名']) ? $_POST['节名'] : '';
+        $数据JSON = isset($_POST['数据']) ? $_POST['数据'] : '{}';
+        
+        if (!$配置文件名 || !$节名) {
+            JSON返回(false, '配置文件名和节名不能为空');
+        }
+        
+        $配置数据 = 读取配置($配置文件名);
+        if (isset($配置数据[$节名])) {
+            JSON返回(false, '该节已存在，请使用编辑功能');
+        }
+        
+        $数据 = json_decode($数据JSON, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            JSON返回(false, '数据格式错误');
+        }
+        
+        $配置数据[$节名] = $数据;
+        写入配置($配置文件名, $配置数据);
+        JSON返回(true, '添加成功');
+        break;
+        
+    case '编辑配置节':
+        if (!验证管理员()) {
+            JSON返回(false, '请先登录管理员账号');
+        }
+        
+        $配置文件名 = isset($_POST['配置文件名']) ? $_POST['配置文件名'] : '';
+        $节名 = isset($_POST['节名']) ? $_POST['节名'] : '';
+        $数据JSON = isset($_POST['数据']) ? $_POST['数据'] : '{}';
+        
+        if (!$配置文件名 || !$节名) {
+            JSON返回(false, '配置文件名和节名不能为空');
+        }
+        
+        $配置数据 = 读取配置($配置文件名);
+        if (!isset($配置数据[$节名])) {
+            JSON返回(false, '该节不存在');
+        }
+        
+        $数据 = json_decode($数据JSON, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            JSON返回(false, '数据格式错误');
+        }
+        
+        $配置数据[$节名] = $数据;
+        写入配置($配置文件名, $配置数据);
+        JSON返回(true, '编辑成功');
+        break;
+        
+    case '删除配置节':
+        if (!验证管理员()) {
+            JSON返回(false, '请先登录管理员账号');
+        }
+        
+        $配置文件名 = isset($_POST['配置文件名']) ? $_POST['配置文件名'] : '';
+        $节名 = isset($_POST['节名']) ? $_POST['节名'] : '';
+        
+        if (!$配置文件名 || !$节名) {
+            JSON返回(false, '配置文件名和节名不能为空');
+        }
+        
+        $配置数据 = 读取配置($配置文件名);
+        if (!isset($配置数据[$节名])) {
+            JSON返回(false, '该节不存在');
+        }
+        
+        unset($配置数据[$节名]);
+        写入配置($配置文件名, $配置数据);
+        JSON返回(true, '删除成功');
+        break;
+        
     default:
         JSON返回(false, '无效的操作');
         break;

@@ -913,33 +913,110 @@ function 执行添加商店() {
     });
 }
 
+var 当前配置文件 = '';
+var 配置字段提示 = {
+    '地图配置': {
+        '描述': '请输入地图描述（如：修仙界的新手村，风景秀丽）',
+        'NPC': '请输入NPC名称，多个用逗号分隔（如：村长,药店老板）',
+        '怪物': '请输入怪物名称，多个用逗号分隔（如：野兔,山鸡）',
+        '前': '请输入前方连接的地图名（如：青云山脚）',
+        '后': '请输入后方连接的地图名（如：青云村）',
+        '左': '请输入左方连接的地图名（如：迷雾森林入口）',
+        '右': '请输入右方连接的地图名（如：青云山腰）'
+    },
+    '怪物配置': {
+        '描述': '请输入怪物描述（如：普通的野兔，攻击力较弱）',
+        '等级': '请输入怪物等级（如：1）',
+        '生命': '请输入怪物生命值（如：50）',
+        '攻击': '请输入怪物攻击力（如：5）',
+        '防御': '请输入怪物防御力（如：2）',
+        '经验奖励': '请输入击杀后获得的经验（如：10）',
+        '货币奖励': '请输入击杀后获得的货币（如：5）',
+        '掉落物品': '请输入掉落物品，格式：物品名:数量范围:掉落率（如：兔毛:1-3:80,胡萝卜:1-2:50）'
+    },
+    '物品配置': {
+        '描述': '请输入物品描述（如：普通的铁剑，锋利耐用）',
+        '类型': '请选择物品类型（武器/防具/饰品/药品/丹药/材料）',
+        '等级': '请输入物品等级（如：1）',
+        '攻击': '请输入攻击加成（如：5）',
+        '防御': '请输入防御加成（如：3）',
+        '生命': '请输入生命加成（如：20）',
+        '灵力': '请输入灵力加成（如：5）',
+        '恢复生命': '请输入恢复生命值（如：30）',
+        '恢复灵力': '请输入恢复灵力值（如：20）',
+        '价格': '请输入物品价格（如：200）'
+    },
+    'NPC配置': {
+        '描述': '请输入NPC描述（如：青云村的村长，和蔼可亲的老者）',
+        '对话': '请输入NPC对话（如：欢迎来到青云村！）',
+        '商店': '请输入关联商店名（如：药店）',
+        '任务': '请输入关联任务名（如：新手任务）'
+    },
+    '技能配置': {
+        '描述': '请输入技能描述（如：基础的剑术攻击）',
+        '类型': '请选择技能类型（攻击/防御/恢复）',
+        '等级': '请输入技能等级（如：1）',
+        '消耗灵力': '请输入消耗灵力值（如：5）',
+        '伤害倍率': '请输入伤害倍率（如：1.2）',
+        '效果': '请输入技能效果（如：增加50%防御，持续3回合）',
+        '恢复生命': '请输入恢复生命值（如：50）',
+        '恢复灵力': '请输入恢复灵力值（如：20）',
+        '学习等级': '请输入学习所需等级（如：1）'
+    },
+    '任务配置': {
+        '描述': '请输入任务描述（如：去村外猎杀3只野兔）',
+        'NPC': '请输入发布任务的NPC（如：村长）',
+        '类型': '请选择任务类型（杀怪/收集/杀怪多目标）',
+        '目标怪物': '请输入目标怪物（如：野兔）',
+        '目标数量': '请输入目标数量（如：3）',
+        '目标物品': '请输入目标物品（如：花瓣）',
+        '奖励经验': '请输入奖励经验（如：50）',
+        '奖励货币': '请输入奖励货币（如：100）',
+        '奖励物品': '请输入奖励物品（如：铁剑）',
+        '奖励物品数量': '请输入奖励物品数量（如：1）'
+    },
+    '商店配置': {
+        '物品': '请输入商店出售的物品，多个用逗号分隔（如：铁剑,青钢剑,金创药）'
+    }
+};
+
 function 获取配置文件列表() {
     发送请求('api/admin.php', {动作: '获取所有配置文件'}, function(result) {
         if (result.成功) {
-            var html = '';
+            var html = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">';
             result.数据.forEach(function(配置文件) {
-                html += '<div class="config-item" onclick="查看配置文件(\'' + 配置文件 + '\')">' + 配置文件 + '.ini</div>';
+                html += '<div class="config-item" onclick="查看配置文件(\'' + 配置文件 + '\')" style="padding:15px 25px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:8px;cursor:pointer;color:#ffd700;font-weight:bold;">' + 配置文件 + '.ini</div>';
             });
+            html += '</div>';
             document.getElementById('配置文件列表').innerHTML = html;
         }
     });
 }
 
 function 查看配置文件(配置文件名) {
+    当前配置文件 = 配置文件名;
     发送请求('api/admin.php', {动作: '读取配置文件', 配置文件名: 配置文件名}, function(result) {
         if (result.成功) {
             document.getElementById('当前配置文件名').textContent = 配置文件名 + '.ini';
             document.getElementById('配置内容').style.display = 'block';
             
-            var html = '';
+            var html = '<div style="margin-bottom:15px;">';
+            html += '<button class="btn btn-success" onclick="显示添加节表单(\'' + 配置文件名 + '\')">添加新' + getConfigTypeName(配置文件名) + '</button>';
+            html += '</div>';
+            
             for (var 节 in result.数据) {
-                html += '<div class="section-block">';
-                html += '<h4>[' + 节 + '] <button class="edit-btn" onclick="编辑配置项(\'' + 配置文件名 + '\',\'' + 节 + '\')">添加/编辑</button></h4>';
+                html += '<div class="section-block" style="margin-bottom:15px;border:1px solid rgba(255,215,0,0.2);padding:15px;border-radius:8px;">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+                html += '<h4 style="color:#ffd700;margin:0;">[' + 节 + ']</h4>';
+                html += '<div>';
+                html += '<button class="btn btn-success" style="padding:5px 10px;font-size:12px;margin-right:5px;" onclick="显示编辑节表单(\'' + 配置文件名 + '\',\'' + 节 + '\')">编辑</button>';
+                html += '<button class="btn btn-danger" style="padding:5px 10px;font-size:12px;" onclick="删除配置节(\'' + 配置文件名 + '\',\'' + 节 + '\')">删除</button>';
+                html += '</div></div>';
+                
                 for (var 键 in result.数据[节]) {
-                    html += '<div class="key-value-row">';
-                    html += '<span class="key">' + 键 + '</span>';
-                    html += '<span class="value">' + result.数据[节][键] + '</span>';
-                    html += '<button class="edit-btn" onclick="编辑配置值(\'' + 配置文件名 + '\',\'' + 节 + '\',\'' + 键 + '\',\'' + result.数据[节][键] + '\')">编辑</button>';
+                    html += '<div class="key-value-row" style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
+                    html += '<span class="key" style="color:#88ccff;min-width:100px;display:inline-block;">' + 键 + '</span>';
+                    html += '<span class="value" style="color:#e8e8e8;">' + result.数据[节][键] + '</span>';
                     html += '</div>';
                 }
                 html += '</div>';
@@ -949,15 +1026,158 @@ function 查看配置文件(配置文件名) {
     });
 }
 
-function 编辑配置值(配置文件名, 节, 键, 当前值) {
-    var 新值 = prompt('修改 ' + 键 + ' 的值:', 当前值);
-    if (新值 !== null) {
+function getConfigTypeName(配置文件名) {
+    var map = {
+        '地图配置': '地图',
+        '怪物配置': '怪物',
+        '物品配置': '物品',
+        'NPC配置': 'NPC',
+        '技能配置': '技能',
+        '任务配置': '任务',
+        '商店配置': '商店'
+    };
+    return map[配置文件名] || '数据';
+}
+
+function 显示添加节表单(配置文件名) {
+    var html = '<h2>添加新' + getConfigTypeName(配置文件名) + '</h2>';
+    html += '<div class="gift-form">';
+    html += '<div class="form-group"><label>' + getConfigTypeName(配置文件名) + '名称</label><input type="text" id="新节名" placeholder="请输入' + getConfigTypeName(配置文件名) + '名称" required></div>';
+    
+    var 提示 = 配置字段提示[配置文件名] || {};
+    for (var 字段 in 提示) {
+        html += '<div class="form-group"><label>' + 字段 + '</label>';
+        if (字段 === '类型' && (配置文件名 === '物品配置' || 配置文件名 === '技能配置')) {
+            html += '<select id="字段_' + 字段 + '">';
+            if (配置文件名 === '物品配置') {
+                html += '<option value="武器">武器</option><option value="防具">防具</option><option value="饰品">饰品</option><option value="药品">药品</option><option value="丹药">丹药</option><option value="材料">材料</option>';
+            } else {
+                html += '<option value="攻击">攻击</option><option value="防御">防御</option><option value="恢复">恢复</option>';
+            }
+            html += '</select>';
+        } else if (字段 === '类型' && 配置文件名 === '任务配置') {
+            html += '<select id="字段_' + 字段 + '">';
+            html += '<option value="杀怪">杀怪</option><option value="收集">收集</option><option value="杀怪多目标">杀怪多目标</option>';
+            html += '</select>';
+        } else {
+            html += '<input type="text" id="字段_' + 字段 + '" placeholder="' + 提示[字段] + '">';
+        }
+        html += '<small style="color:#888;display:block;margin-top:3px;">' + 提示[字段] + '</small></div>';
+    }
+    
+    html += '<button class="btn btn-success" onclick="执行添加节(\'' + 配置文件名 + '\')">保存</button>';
+    html += '</div>';
+    html += '<button class="btn btn-primary" style="margin-top:15px;" onclick="关闭管理员弹窗()">取消</button>';
+    打开管理员弹窗(html);
+}
+
+function 执行添加节(配置文件名) {
+    var 节名 = document.getElementById('新节名').value;
+    if (!节名) {
+        alert('名称不能为空');
+        return;
+    }
+    
+    var 数据 = {};
+    var 提示 = 配置字段提示[配置文件名] || {};
+    for (var 字段 in 提示) {
+        var 值 = document.getElementById('字段_' + 字段).value;
+        if (值) {
+            数据[字段] = 值;
+        }
+    }
+    
+    if (配置文件名 === '地图配置' && !数据['坐标']) {
+        数据['坐标'] = '';
+    }
+    
+    发送请求('api/admin.php', {
+        动作: '添加配置节',
+        配置文件名: 配置文件名,
+        节名: 节名,
+        数据: JSON.stringify(数据)
+    }, function(result) {
+        if (result.成功) {
+            alert(result.消息);
+            关闭管理员弹窗();
+            查看配置文件(配置文件名);
+        } else {
+            alert(result.消息);
+        }
+    });
+}
+
+function 显示编辑节表单(配置文件名, 节名) {
+    发送请求('api/admin.php', {动作: '读取配置文件', 配置文件名: 配置文件名}, function(result) {
+        if (result.成功 && result.数据[节名]) {
+            var 当前数据 = result.数据[节名];
+            
+            var html = '<h2>编辑' + getConfigTypeName(配置文件名) + ' - ' + 节名 + '</h2>';
+            html += '<div class="gift-form">';
+            
+            var 提示 = 配置字段提示[配置文件名] || {};
+            for (var 字段 in 提示) {
+                var 当前值 = 当前数据[字段] || '';
+                html += '<div class="form-group"><label>' + 字段 + '</label>';
+                if (字段 === '类型' && (配置文件名 === '物品配置' || 配置文件名 === '技能配置')) {
+                    html += '<select id="编辑字段_' + 字段 + '">';
+                    var options = 配置文件名 === '物品配置' ? ['武器','防具','饰品','药品','丹药','材料'] : ['攻击','防御','恢复'];
+                    options.forEach(function(opt) {
+                        html += '<option value="' + opt + '"' + (当前值 === opt ? ' selected' : '') + '>' + opt + '</option>';
+                    });
+                    html += '</select>';
+                } else if (字段 === '类型' && 配置文件名 === '任务配置') {
+                    html += '<select id="编辑字段_' + 字段 + '">';
+                    ['杀怪','收集','杀怪多目标'].forEach(function(opt) {
+                        html += '<option value="' + opt + '"' + (当前值 === opt ? ' selected' : '') + '>' + opt + '</option>';
+                    });
+                    html += '</select>';
+                } else {
+                    html += '<input type="text" id="编辑字段_' + 字段 + '" value="' + 当前值 + '" placeholder="' + 提示[字段] + '">';
+                }
+                html += '<small style="color:#888;display:block;margin-top:3px;">' + 提示[字段] + '</small></div>';
+            }
+            
+            html += '<button class="btn btn-success" onclick="执行编辑节(\'' + 配置文件名 + '\',\'' + 节名 + '\')">保存</button>';
+            html += '</div>';
+            html += '<button class="btn btn-primary" style="margin-top:15px;" onclick="关闭管理员弹窗()">取消</button>';
+            打开管理员弹窗(html);
+        }
+    });
+}
+
+function 执行编辑节(配置文件名, 节名) {
+    var 数据 = {};
+    var 提示 = 配置字段提示[配置文件名] || {};
+    for (var 字段 in 提示) {
+        var 值 = document.getElementById('编辑字段_' + 字段).value;
+        if (值) {
+            数据[字段] = 值;
+        }
+    }
+    
+    发送请求('api/admin.php', {
+        动作: '编辑配置节',
+        配置文件名: 配置文件名,
+        节名: 节名,
+        数据: JSON.stringify(数据)
+    }, function(result) {
+        if (result.成功) {
+            alert(result.消息);
+            关闭管理员弹窗();
+            查看配置文件(配置文件名);
+        } else {
+            alert(result.消息);
+        }
+    });
+}
+
+function 删除配置节(配置文件名, 节名) {
+    if (confirm('确定要删除 [' + 节名 + '] 吗？此操作不可恢复！')) {
         发送请求('api/admin.php', {
-            动作: '写入配置文件',
+            动作: '删除配置节',
             配置文件名: 配置文件名,
-            节: 节,
-            键: 键,
-            值: 新值
+            节名: 节名
         }, function(result) {
             if (result.成功) {
                 alert(result.消息);
@@ -966,29 +1186,6 @@ function 编辑配置值(配置文件名, 节, 键, 当前值) {
                 alert(result.消息);
             }
         });
-    }
-}
-
-function 编辑配置项(配置文件名, 节) {
-    var 键 = prompt('输入键名:');
-    if (键 !== null && 键 !== '') {
-        var 值 = prompt('输入值:');
-        if (值 !== null) {
-            发送请求('api/admin.php', {
-                动作: '写入配置文件',
-                配置文件名: 配置文件名,
-                节: 节,
-                键: 键,
-                值: 值
-            }, function(result) {
-                if (result.成功) {
-                    alert(result.消息);
-                    查看配置文件(配置文件名);
-                } else {
-                    alert(result.消息);
-                }
-            });
-        }
     }
 }
 
