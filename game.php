@@ -8,15 +8,6 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="header">
-            <div class="player-info">
-                <span id="角色名">玩家</span>
-                <span>Lv.<span id="等级">1</span></span>
-                <span>门派：<span id="门派">青云派</span></span>
-            </div>
-            <button onclick="退出登录()" class="btn btn-small">退出</button>
-        </div>
-        
         <div class="main-content">
             <div class="map-area">
                 <h2 id="地图名">青云村</h2>
@@ -57,6 +48,7 @@
                     <button class="menu-btn" onclick="显示面板('商店')">系统商店</button>
                     <button class="menu-btn" onclick="签到()">签到</button>
                     <button class="menu-btn" onclick="刷新地图()">刷新</button>
+                    <button class="menu-btn" onclick="退出登录()" style="background:rgba(255,68,68,0.2);border-color:rgba(255,68,68,0.5);color:#ff4444;">退出</button>
                 </div>
             </div>
         </div>

@@ -33,15 +33,8 @@ function 刷新玩家信息() {
     发送请求('api/character.php', {动作: '获取角色信息'}, function(result) {
         if (result.成功) {
             玩家数据 = result.数据;
-            更新玩家信息显示();
         }
     });
-}
-
-function 更新玩家信息显示() {
-    document.getElementById('角色名').textContent = 玩家数据.角色名;
-    document.getElementById('等级').textContent = 玩家数据.等级;
-    document.getElementById('门派').textContent = 玩家数据.门派;
 }
 
 function 刷新地图() {
