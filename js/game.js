@@ -42,13 +42,6 @@ function 更新玩家信息显示() {
     document.getElementById('角色名').textContent = 玩家数据.角色名;
     document.getElementById('等级').textContent = 玩家数据.等级;
     document.getElementById('门派').textContent = 玩家数据.门派;
-    document.getElementById('生命').textContent = 玩家数据.生命;
-    document.getElementById('最大生命').textContent = 玩家数据.最大生命;
-    document.getElementById('灵力').textContent = 玩家数据.灵力;
-    document.getElementById('最大灵力').textContent = 玩家数据.最大灵力;
-    document.getElementById('经验').textContent = 玩家数据.经验;
-    document.getElementById('升级所需').textContent = 玩家数据.等级 * 100;
-    document.getElementById('货币').textContent = 玩家数据.货币;
 }
 
 function 刷新地图() {
@@ -489,6 +482,9 @@ function 赠送货币(目标玩家) {
 
 function 显示面板(面板名) {
     switch(面板名) {
+        case '状态':
+            显示状态();
+            break;
         case '背包':
             显示背包();
             break;
@@ -505,6 +501,35 @@ function 显示面板(面板名) {
             显示系统商店();
             break;
     }
+}
+
+function 显示状态() {
+    发送请求('api/character.php', {动作: '获取角色信息'}, function(result) {
+        if (result.成功) {
+            var d = result.数据;
+            var html = '<h2>角色状态</h2>';
+            html += '<div class="monster-stats">';
+            html += '<div class="stat-item"><div class="label">角色名</div><div class="value" style="font-size:14px;">' + d.角色名 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">性别</div><div class="value" style="font-size:14px;">' + d.性别 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">门派</div><div class="value" style="font-size:14px;">' + d.门派 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">等级</div><div class="value">' + d.等级 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">经验</div><div class="value">' + d.经验 + '/' + (d.等级 * 100) + '</div></div>';
+            html += '<div class="stat-item"><div class="label">货币</div><div class="value">' + d.货币 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">位置</div><div class="value" style="font-size:14px;">' + d.位置 + '</div></div>';
+            html += '</div>';
+            
+            html += '<h3 style="color:#88ccff;margin:15px 0 10px;">属性</h3>';
+            html += '<div class="monster-stats">';
+            html += '<div class="stat-item"><div class="label">生命</div><div class="value">' + d.生命 + '/' + d.最大生命 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">灵力</div><div class="value">' + d.灵力 + '/' + d.最大灵力 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">攻击</div><div class="value">' + d.攻击 + '</div></div>';
+            html += '<div class="stat-item"><div class="label">防御</div><div class="value">' + d.防御 + '</div></div>';
+            html += '</div>';
+            
+            html += '<button class="btn btn-primary" style="margin-top:15px;" onclick="关闭弹窗()">关闭</button>';
+            打开弹窗(html);
+        }
+    });
 }
 
 function 显示背包() {

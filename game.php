@@ -14,12 +14,6 @@
                 <span>Lv.<span id="等级">1</span></span>
                 <span>门派：<span id="门派">青云派</span></span>
             </div>
-            <div class="player-stats">
-                <span>生命：<span id="生命">100</span>/<span id="最大生命">100</span></span>
-                <span>灵力：<span id="灵力">50</span>/<span id="最大灵力">50</span></span>
-                <span>经验：<span id="经验">0</span>/<span id="升级所需">100</span></span>
-                <span>货币：<span id="货币">1000</span></span>
-            </div>
             <button onclick="退出登录()" class="btn btn-small">退出</button>
         </div>
         
@@ -55,6 +49,7 @@
             
             <div class="side-panel">
                 <div class="menu">
+                    <button class="menu-btn" onclick="显示面板('状态')">状态</button>
                     <button class="menu-btn" onclick="显示面板('背包')">背包</button>
                     <button class="menu-btn" onclick="显示面板('装备')">装备</button>
                     <button class="menu-btn" onclick="显示面板('技能')">技能</button>
