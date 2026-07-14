@@ -9,6 +9,7 @@
 <body>
     <div class="admin-container">
         <h1>修仙世界 - 管理后台</h1>
+        <div style="text-align:right;color:#aaa;font-size:12px;">版本: v1.1 | 最后更新: <?php echo date('Y-m-d H:i:s'); ?></div>
         
         <div id="login-section" class="admin-section">
             <h2>管理员登录</h2>
@@ -30,15 +31,81 @@
         <div id="admin-panel" class="admin-section" style="display:none;">
             <div class="admin-tabs">
                 <button class="tab-btn active" onclick="切换标签('用户管理')">用户管理</button>
+                <button class="tab-btn" onclick="切换标签('地图管理')">地图管理</button>
+                <button class="tab-btn" onclick="切换标签('怪物管理')">怪物管理</button>
+                <button class="tab-btn" onclick="切换标签('物品管理')">物品管理</button>
+                <button class="tab-btn" onclick="切换标签('NPC管理')">NPC管理</button>
+                <button class="tab-btn" onclick="切换标签('技能管理')">技能管理</button>
+                <button class="tab-btn" onclick="切换标签('任务管理')">任务管理</button>
+                <button class="tab-btn" onclick="切换标签('商店管理')">商店管理</button>
                 <button class="tab-btn" onclick="切换标签('配置管理')">配置管理</button>
                 <button class="tab-btn" onclick="重置所有数据()">重置所有数据</button>
                 <button class="tab-btn" style="float:right;" onclick="退出管理员()">退出</button>
             </div>
             
             <div id="用户管理面板" class="tab-content">
-                <h3>用户列表</h3>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>用户列表</h3>
+                    <button class="btn btn-success" onclick="显示添加用户表单()">添加用户</button>
+                </div>
                 <button class="btn btn-primary" onclick="获取用户列表()">刷新用户列表</button>
                 <div id="用户列表" class="user-list"></div>
+            </div>
+            
+            <div id="地图管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>地图列表</h3>
+                    <button class="btn btn-success" onclick="显示添加地图表单()">添加地图</button>
+                </div>
+                <div id="地图列表"></div>
+            </div>
+            
+            <div id="怪物管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>怪物列表</h3>
+                    <button class="btn btn-success" onclick="显示添加怪物表单()">添加怪物</button>
+                </div>
+                <div id="怪物列表"></div>
+            </div>
+            
+            <div id="物品管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>物品列表</h3>
+                    <button class="btn btn-success" onclick="显示添加物品表单()">添加物品</button>
+                </div>
+                <div id="物品列表"></div>
+            </div>
+            
+            <div id="NPC管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>NPC列表</h3>
+                    <button class="btn btn-success" onclick="显示添加NPC表单()">添加NPC</button>
+                </div>
+                <div id="NPC列表"></div>
+            </div>
+            
+            <div id="技能管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>技能列表</h3>
+                    <button class="btn btn-success" onclick="显示添加技能表单()">添加技能</button>
+                </div>
+                <div id="技能列表"></div>
+            </div>
+            
+            <div id="任务管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>任务列表</h3>
+                    <button class="btn btn-success" onclick="显示添加任务表单()">添加任务</button>
+                </div>
+                <div id="任务列表"></div>
+            </div>
+            
+            <div id="商店管理面板" class="tab-content" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h3>商店列表</h3>
+                    <button class="btn btn-success" onclick="显示添加商店表单()">添加商店</button>
+                </div>
+                <div id="商店列表"></div>
             </div>
             
             <div id="配置管理面板" class="tab-content" style="display:none;">
