@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修仙世界 - 管理后台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>修仙世界 - 管理后台</h1>
+        
+        <div id="login-section" class="admin-section">
+            <h2>管理员登录</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label>管理员账号</label>
+                    <input type="text" id="管理员账号" required>
+                </div>
+                <div class="form-group">
+                    <label>管理员密码</label>
+                    <input type="password" id="管理员密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary">登录</button>
+            </form>
+            <p><a href="login.html">返回登录</a></p>
+            <div id="admin-message" class="message"></div>
+        </div>
+        
+        <div id="admin-panel" class="admin-section" style="display:none;">
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="切换标签('用户管理')">用户管理</button>
+                <button class="tab-btn" onclick="切换标签('配置管理')">配置管理</button>
+                <button class="tab-btn" onclick="重置所有数据()">重置所有数据</button>
+                <button class="tab-btn" style="float:right;" onclick="退出管理员()">退出</button>
+            </div>
+            
+            <div id="用户管理面板" class="tab-content">
+                <h3>用户列表</h3>
+                <button class="btn btn-primary" onclick="获取用户列表()">刷新用户列表</button>
+                <div id="用户列表" class="user-list"></div>
+            </div>
+            
+            <div id="配置管理面板" class="tab-content" style="display:none;">
+                <h3>配置文件列表</h3>
+                <div id="配置文件列表" class="config-list"></div>
+                <div id="配置内容" style="display:none;">
+                    <h3 id="当前配置文件名"></h3>
+                    <div id="配置节列表"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/admin.js"></script>
+</body>
+</html>
